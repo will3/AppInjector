@@ -1,6 +1,6 @@
 ### App Injector
 
-Usage:
+## Usage
 
 ```swift
 import AppInjector
@@ -31,4 +31,14 @@ let car = injector.resolve(Car.self)
 
 assert(car.engine != nil)
 assert(car.name == "private")
+```
+
+## Installation
+
+AppInjector is available through [CocoaPods](http://cocoapods.org). To install
+it, simply add the following lines to your Podfile:
+
+```ruby
+use_frameworks!
+pod "AppInjector"
 ```
