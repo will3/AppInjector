@@ -87,4 +87,18 @@ class AppInjectorTests: XCTestCase {
         
         assert(car1 !== car2)
     }
+    
+    func testInjectDependencies() {
+        let injector = Injector()
+        injector.bind("engine") { Engine() }
+        injector.bind("name", value: "private")
+        injector.bind("car", type: Car.self).withDependencies(["name", "engine"])
+        
+        let car = Car()
+        
+        injector.injectDependencies(car)
+        
+        assert(car.engine != nil)
+        assert(car.name == "private")
+    }
 }

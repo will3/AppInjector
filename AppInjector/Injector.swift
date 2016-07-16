@@ -14,7 +14,7 @@ import Foundation
 public class Injector {
     
     /// Default instance
-    static let defaultInjector = Injector()
+    public static let defaultInjector = Injector()
     
     private var bindings = [String: Binding]()
     private var typeToBindingName = [String: String]()
@@ -126,6 +126,26 @@ public class Injector {
         
         let object = binding.factory!()
         
+        injectDependencies(object, binding: binding)
+        
+        if binding.once {
+            binding.value = object
+        }
+        
+        return object
+    }
+    
+    /**
+     Resolve dependenceis for object
+     
+     - parameter object: object to inject
+     - paramter binding: optional binding to use
+    */
+    public func injectDependencies(object: AnyObject, binding: Binding? = nil) {
+        guard let binding = binding ?? getBinding(object) else {
+            fatalError("cannot find binding for object \(object)")
+        }
+        
         if binding.dependencies.count > 0 {
             guard let nsObject = object as? NSObject else {
                 fatalError("dependencies specified, but the object is not injectable")
@@ -136,11 +156,11 @@ public class Injector {
                 nsObject.setValue(dep, forKey: propertyKey)
             }
         }
-        
-        if binding.once {
-            binding.value = object
-        }
-        
-        return object
+    }
+    
+    private func getBinding(object: AnyObject) -> Binding? {
+        let typeName = "\(object.dynamicType)"
+        guard let bindingName = typeToBindingName[typeName] else { return nil }
+        return bindings[bindingName]
     }
 }
