@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "AppInjector"
-  s.version      = "0.0.1"
+  s.version      = "0.0.2"
   s.summary      = "Light weight injector"
   s.homepage     = "https://github.com/will3/AppInjector"
   
